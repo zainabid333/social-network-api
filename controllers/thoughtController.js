@@ -13,15 +13,17 @@ module.exports = {
   // Get a single thought
   async getSingleThought(req, res) {
     try {
-      const thought = await Thought.findOne({ _id: req.params.thoughtId });
-
+      const thought = await Thought.findOne({ _id: req.params.thoughtId }).lean();  // Use lean() to simplify the object
+      console.log(thought);  // Check the response object
+  
       if (!thought) {
         return res.status(404).json({ message: 'No thought with that ID' });
       }
-
-      res.json(thought);
+  
+      res.json(thought);  // Send the simplified object
     } catch (err) {
-      res.status(500).json(err);
+      console.error('Error in getSingleThought:', err);  // Improved error logging
+      res.status(500).json({ message: 'Internal Server Error', error: err.message });  // Send error details
     }
   },
   // Create a thought

@@ -1,16 +1,16 @@
 const { User, Thought } = require("../models");
 const userController = {
+  
   //get all users
   getUsers(req, res) {
     User.find()
       .then((users) => res.json(users))
       .catch((err) => res.status(500).json(err));
   },
-
   //get a single user
   getSingleUser(req, res) {
     User.findOne({ _id: req.params.userId })
-      .populate("thoughts")
+      .populate("thoughts").lean()
       .populate("friends")
       .then((user) =>
         !user
@@ -19,7 +19,6 @@ const userController = {
       )
       .catch((err) => res.status(500).json(err));
   },
-
   //create a single user
   createUser(req, res) {
     User.create(req.body)
@@ -91,4 +90,5 @@ const userController = {
       .catch((err) => res.status(500).json(err));
   },
 };
+
 module.exports = userController;
